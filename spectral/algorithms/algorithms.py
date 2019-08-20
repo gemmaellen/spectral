@@ -593,13 +593,13 @@ def principal_components(image):
     else:
         stats = calc_stats(image)
 
-    (L, V) = numpy.linalg.eig(stats.cov)
+    # Reshape and center data
+    X = image.reshape(-1, image.shape[-1]) - stats.mean
 
-    # numpy says eigenvalues may not be sorted so we'll sort them, if needed.
-    if not np.alltrue(np.diff(L) <= 0):
-        ii = list(reversed(np.argsort(L)))
-        L = L[ii]
-        V = V[:, ii]
+    u, s, vh = np.linalg.svd(X, full_matrices = False)
+
+    V = vh.T # eigenvectors
+    L = np.square(s) * (1/(X.shape[0]-1)) # eigenvalues
 
     return PrincipalComponents(L, V, stats)
 
