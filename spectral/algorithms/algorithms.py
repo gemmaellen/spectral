@@ -588,7 +588,7 @@ def principal_components(image):
     '''
     from numpy import sqrt, sum
 
-    if isinstance(image, sp.GaussianStats):
+    if isinstance(image, GaussianStats):
         stats = image
 
         (L, V) = np.linalg.eig(stats.cov)
