@@ -600,7 +600,7 @@ def principal_components(image):
             V = V[:, ii]
 
     else:
-        stats = sp.calc_stats(image)
+        stats = calc_stats(image)
 
         # Reshape and center data
         X = image.reshape(-1, image.shape[-1]) - stats.mean
