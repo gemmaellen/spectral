@@ -588,18 +588,27 @@ def principal_components(image):
     '''
     from numpy import sqrt, sum
 
-    if isinstance(image, GaussianStats):
+    if isinstance(image, sp.GaussianStats):
         stats = image
+
+        (L, V) = np.linalg.eig(stats.cov)
+
+        # numpy says eigenvalues may not be sorted so we'll sort them, if needed.
+        if not np.alltrue(np.diff(L) <= 0):
+            ii = list(reversed(np.argsort(L)))
+            L = L[ii]
+            V = V[:, ii]
+
     else:
-        stats = calc_stats(image)
+        stats = sp.calc_stats(image)
 
-    # Reshape and center data
-    X = image.reshape(-1, image.shape[-1]) - stats.mean
+        # Reshape and center data
+        X = image.reshape(-1, image.shape[-1]) - stats.mean
 
-    u, s, vh = np.linalg.svd(X, full_matrices = False)
+        u, s, vh = np.linalg.svd(X, full_matrices = False)
 
-    V = vh.T # eigenvectors
-    L = np.square(s) * (1/(X.shape[0]-1)) # eigenvalues
+        V = vh.T # eigenvectors
+        L = np.square(s) * (1/(X.shape[0]-1)) # eigenvalues
 
     return PrincipalComponents(L, V, stats)
 
