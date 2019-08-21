@@ -605,6 +605,8 @@ def principal_components(image):
         # Reshape and center data
         X = image.reshape(-1, image.shape[-1]) - stats.mean
 
+        # Turns out this is actually slower. Stability improvements probably not worth it. 
+
         u, s, vh = np.linalg.svd(X, full_matrices = False)
 
         V = vh.T # eigenvectors
