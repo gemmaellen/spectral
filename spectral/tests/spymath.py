@@ -119,11 +119,13 @@ class PCATest(SpyTest):
         assert(np.allclose(evecs.T.dot(evecs), np.eye(evecs.shape[0])))
 
     def test_consistency_with_stats(self):
+        import spectral as spy
         '''Check principal_components(stats) = principal_components(data).'''
         pc_from_stats = spy.principal_components(self.pc.stats)
         assert(np.allclose(self.pc.stats.cov, pc_from_stats.stats.cov))
         assert(np.allclose(self.pc.stats.mean, pc_from_stats.stats.mean))
-        assert(np.allclose(self.pc.eigenvectors, pc_from_stats.eigenvectors))
+        assert(np.allclose(np.abs(self.pc.eigenvectors),
+                            np.abs(pc_from_stats.eigenvectors)))
         assert(np.allclose(self.pc.eigenvalues, pc_from_stats.eigenvalues))
 
 
