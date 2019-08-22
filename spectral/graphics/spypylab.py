@@ -78,7 +78,7 @@ class MplCallback(object):
     # associated exception will be rethrown.
     raise_event_exceptions = False
     show_events = False
-    
+
     def __init__(self, registry=None, event=None, callback=None):
         '''
          Arguments:
@@ -127,10 +127,10 @@ class MplCallback(object):
             self.registry = registry.axes.figure.canvas
         else:
             self.registry = registry
-        
+
     def connect(self, registry=None, event=None, callback=None):
         '''Binds the callback to the registry and begins receiving event.
-        
+
          Arguments:
 
             registry (ImageView, CallbackRegistry, or FigureCanvas):
@@ -246,7 +246,7 @@ class ParentViewPanCallback(ImageViewCallback):
     def connect(self):
         super(ParentViewPanCallback, self).connect(registry=self.view,
                                                    event='button_press_event')
-                                                   
+
 class ImageViewKeyboardHandler(ImageViewCallback):
     '''Default handler for keyboard events in an ImageView.'''
     def __init__(self, view, *args, **kwargs):
@@ -283,11 +283,11 @@ class ImageViewKeyboardHandler(ImageViewCallback):
             print('key = %s' % event.key)
         kp = KeyParser(event.key)
         key = kp.key
-        
+
         #-----------------------------------------------------------
         # Handling for keyboard input related to class ID assignment
         #-----------------------------------------------------------
-        
+
         if key is None and kp.mods_are('shift') and \
           self.view.selector is not None:
             # Rectangle selector is active while shift key is pressed
@@ -332,7 +332,7 @@ class ImageViewKeyboardHandler(ImageViewCallback):
         if len(self.idstr) > 0:
             self.idstr = ''
             print('Cancelled class ID assignment.')
-                
+
         #-----------------------------------------------------------
         # General keybinds
         #-----------------------------------------------------------
@@ -401,7 +401,7 @@ class KeyParser(object):
     def reset(self):
         self.key = None
         self.modifiers = set()
-        
+
     def parse(self, key_str):
         '''Extracts the key value and modifiers from a string.'''
         self.reset()
@@ -421,7 +421,7 @@ class KeyParser(object):
             self.key = tokens[-1]
 
     def has_mod(self, m):
-        '''Returns True if `m` is one of the modifiers.'''        
+        '''Returns True if `m` is one of the modifiers.'''
         return m in self.modifiers
 
     def mods_are(self, *args):
@@ -430,7 +430,7 @@ class KeyParser(object):
             if a not in self.modifiers:
                 return False
         return True
-        
+
     def get_token_modifiers(self, token):
         mods = set()
         for (modifier, aliases) in list(self.aliases.items()):
@@ -469,7 +469,7 @@ class ImageViewMouseHandler(ImageViewCallback):
                     except:
                         f = plt.figure()
                         self.view.spectrum_plot_fig_id = f.number
-                    s = plt.subplot(111)
+                    s = plt.subplot(221)
                     settings.plotter.plot(self.view.source[r, c],
                                           self.view.source)
                     s.xaxis.axes.relim()
@@ -556,7 +556,7 @@ class ImageView(object):
         self.selection = None
         self.interpolation = kwargs.get('interpolation',
                                         settings.imshow_interpolation)
-        
+
         if data is not None:
             self.set_data(data, bands, **kwargs)
         if classes is not None:
@@ -565,7 +565,7 @@ class ImageView(object):
             self.set_source(source)
 
         self.class_colors = spectral.spy_colors
- 
+
         self.spectrum_plot_fig_id = None
         self.parent = None
         self.selector = None
@@ -574,7 +574,7 @@ class ImageView(object):
 
         # Callbacks for events associated specifically with this window.
         self.callbacks = None
-        
+
         # A sharable callback registry for related windows. If this
         # CallbackRegistry is set prior to calling ImageView.show (e.g., by
         # setting it equal to the `callbacks_common` member of another
@@ -586,7 +586,7 @@ class ImageView(object):
 
     def set_data(self, data, bands=None, **kwargs):
         '''Sets the data to be shown in the RGB channels.
-        
+
         Arguments:
 
             `data` (ndarray or SpyImage):
@@ -648,7 +648,7 @@ class ImageView(object):
         if self.is_shown:
             self._update_data_rgb()
             self.refresh()
-        
+
     def _update_data_rgb(self):
         '''Regenerates the RGB values for display.'''
         from .graphics import get_rgb_meta
@@ -719,7 +719,7 @@ class ImageView(object):
                 The source for spectral data associated with the view.
         '''
         self.source = source
-    
+
     def show(self, mode=None, fignum=None):
         '''Renders the image data.
 
@@ -759,7 +759,7 @@ class ImageView(object):
         if settings.imshow_figure_size is not None:
             kwargs['figsize'] = settings.imshow_figure_size
         plt.figure(**kwargs)
-            
+
         if self.data_rgb is not None:
             self.show_data()
         if self.classes is not None:
@@ -779,7 +779,7 @@ class ImageView(object):
         '''Creates the object's callback registry and default callbacks.'''
         from spectral import settings
         from matplotlib.cbook import CallbackRegistry
-        
+
         self.callbacks = CallbackRegistry()
 
         # callbacks_common may have been set to a shared external registry
@@ -884,7 +884,7 @@ class ImageView(object):
         # Make the rectangle display until at least the next event
         self.selector.to_draw.set_visible(True)
         self.selector.update()
-    
+
     def _guess_mode(self):
         '''Select an appropriate display mode, based on current data.'''
         if self.data_rgb is not None:
@@ -964,7 +964,7 @@ class ImageView(object):
             self.class_rgb = np.ma.array(self.classes, mask=(self.classes==0))
         else:
             self.class_rgb = np.array(self.classes)
-        
+
     def set_display_mode(self, mode):
         '''`mode` must be one of ("data", "classes", "overlay").'''
         if mode not in ('data', 'classes', 'overlay'):
@@ -1134,7 +1134,7 @@ class ImageView(object):
 
     def __repr__(self):
         return str(self)
-        
+
 
 def imshow(data=None, bands=None, classes=None, source=None, colors=None,
            figsize=None, fignum=None, title=None, **kwargs):
@@ -1218,7 +1218,7 @@ def imshow(data=None, bands=None, classes=None, source=None, colors=None,
 
         >>> classes = open_image('92AV3GT.GIS').read_band(0)
         >>> cview = imshow(classes=classes)
-    
+
     Overlay ground truth data on the data display:
 
         >>> view.set_classes(classes)
@@ -1263,7 +1263,7 @@ def imshow(data=None, bands=None, classes=None, source=None, colors=None,
     if title is not None:
         view.set_title(title)
     return view
-        
+
 
 def plot(data, source=None):
     '''
@@ -1318,4 +1318,3 @@ def set_mpl_interactive():
 
     if not plt.isinteractive():
         plt.interactive(True)
-
