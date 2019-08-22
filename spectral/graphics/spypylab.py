@@ -469,7 +469,7 @@ class ImageViewMouseHandler(ImageViewCallback):
                     except:
                         f = plt.figure()
                         self.view.spectrum_plot_fig_id = f.number
-                    s = plt.subplot(221)
+                    s = plt.subplot(111)
                     settings.plotter.plot(self.view.source[r, c],
                                           self.view.source)
                     s.xaxis.axes.relim()
@@ -536,7 +536,7 @@ class ImageView(object):
         import spectral
         from spectral import settings
         self.is_shown = False
-        self.imshow_data_kwargs = {'cmap': settings.imshow_float_cmap}
+        self.imshow_data_kwargs = {'cmap': settings.imshow_float_cmap} # This sets cmap to gray every time
         self.rgb_kwargs = {}
         self.imshow_class_kwargs = {'zorder': 1}
 

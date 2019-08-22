@@ -356,8 +356,8 @@ def imshow(data, bands=None, **kwargs):
     for k in ['stretch', 'stretch_all', 'bounds']:
         if k in kwargs:
             rgb_kwargs[k] = kwargs.pop(k)
-    
-    imshow_kwargs = {'cmap': 'gray'}
+
+    imshow_kwargs = {'cmap': 'viridis'}
     imshow_kwargs.update(kwargs)
 
     rgb = get_rgb(data, bands, **rgb_kwargs)
@@ -510,7 +510,7 @@ def get_rgb(source, bands=None, **kwargs):
             If neither `stretch` nor `bounds` are specified, then the default
             value of `stretch` defined by `spectral.settings.imshow_stretch`
             will be used.
-    
+
         `bounds` (tuple):
 
             This keyword functions similarly to the `stretch` keyword, except
@@ -518,7 +518,7 @@ def get_rgb(source, bands=None, **kwargs):
             histogram values. The form of this keyword is the same as the first
             two forms for the `stretch` keyword (i.e., either a 2-tuple of
             numbers or a 3-tuple of 2-tuples of numbers).
-    
+
         `stretch_all` (bool):
 
             If this keyword is True, each color channel will be scaled
@@ -799,4 +799,3 @@ def check_wx_app():
         warn('\nThere is no current wx.App object - creating one now.',
              UserWarning)
         spectral.app = wx.App()
-
